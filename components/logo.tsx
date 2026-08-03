@@ -1,18 +1,18 @@
+import Image from "next/image";
 import Link from "next/link";
 
-export function Logo({ compact = false }: { compact?: boolean }) {
+export function Logo({ hero = false }: { hero?: boolean }) {
   return (
-    <Link className="brand" href="/" aria-label="AI Sprouts home">
-      <span className="brand-mark" aria-hidden="true">
-        <span className="brand-seed" />
-        <span className="brand-leaf brand-leaf-left" />
-        <span className="brand-leaf brand-leaf-right" />
-      </span>
-      {!compact && (
-        <span className="brand-wordmark">
-          <strong>AI</strong> Sprouts
-        </span>
-      )}
+    <Link className={hero ? "brand brand-hero" : "brand"} href="/" aria-label="AI Sprouts home">
+      <Image
+        className="brand-image"
+        src="/ai-sprouts-logo-transparent.png"
+        width={690}
+        height={690}
+        loading={hero ? "eager" : "lazy"}
+        alt="AI Sprouts — Growing Young Minds"
+      />
+      {!hero && <span className="brand-name">AI Sprouts</span>}
     </Link>
   );
 }
