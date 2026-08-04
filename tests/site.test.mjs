@@ -10,12 +10,15 @@ test("contains the four requested public pages", async () => {
   await assert.rejects(access(new URL("app/events/page.tsx", root)));
 });
 
-test("uses the supplied AI Sprouts logo in navigation and home hero", async () => {
-  const [logo, home] = await Promise.all([readFile(new URL("components/logo.tsx", root), "utf8"), readFile(new URL("app/page.tsx", root), "utf8")]);
+test("uses the supplied AI Sprouts logo in navigation and workshop carousel on the home hero", async () => {
+  const [logo, home, carousel] = await Promise.all([readFile(new URL("components/logo.tsx", root), "utf8"), readFile(new URL("app/page.tsx", root), "utf8"), readFile(new URL("components/home-carousel.tsx", root), "utf8")]);
   assert.match(logo, /ai-sprouts-logo-transparent\.png/);
   assert.match(logo, /AI Sprouts — Growing Young Minds/);
-  assert.match(home, /<Logo hero/);
+  assert.match(home, /<HomeCarousel/);
+  assert.match(carousel, /workshop-01\.png/);
+  assert.match(carousel, /workshop-05\.png/);
   await access(new URL("public/ai-sprouts-logo-transparent.png", root));
+  await Promise.all(Array.from({ length: 5 }, (_, index) => access(new URL(`public/workshop-0${index + 1}.png`, root))));
 });
 
 test("navigation exposes Home, Mission, and Our Team without duplicating the Let's talk destination", async () => {

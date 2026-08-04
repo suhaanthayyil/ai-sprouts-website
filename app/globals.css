@@ -686,10 +686,11 @@ h3 { line-height: 1.15; }
 .nav-links > .nav-contact::after { display: none; }
 .simple-home-hero .home-hero-grid { min-height: 690px; }
 .trust-copy { margin: 34px 0 0 !important; color: var(--muted) !important; font-size: .8rem !important; font-weight: 650; }
-.official-logo-stage { min-height: 530px; position: relative; display: grid; place-items: center; align-content: center; background: #091013; border-radius: 36px 36px 46% 36px; border: 1px solid var(--forest); overflow: hidden; box-shadow: var(--shadow); }
-.official-logo-stage .brand-hero { position: relative; z-index: 2; display: block; width: min(86%, 440px); }
-.official-logo-stage .brand-image { width: 100%; height: auto; object-fit: contain; }
-.official-logo-stage > p { position: relative; z-index: 2; color: rgba(255,255,255,.56); margin: 8px 0 0; font-size: .62rem; text-transform: uppercase; letter-spacing: .15em; font-weight: 800; }
+.home-carousel { width: 100%; aspect-ratio: 16 / 10; min-height: 0; position: relative; overflow: hidden; isolation: isolate; }
+.home-carousel-track { position: absolute; inset: 0; display: flex; transition: transform .85s cubic-bezier(.7, 0, .2, 1); will-change: transform; }
+.home-carousel-track.without-transition { transition: none; }
+.home-carousel-slide { position: relative; min-width: 100%; height: 100%; margin: 0; }
+.home-carousel-slide img { object-fit: cover; object-position: center 38%; }
 .logo-orbit { position: absolute; border: 1px solid rgba(255,255,255,.18); border-radius: 50%; }
 .logo-orbit-one { width: 500px; height: 500px; right: -180px; top: -210px; }
 .logo-orbit-two { width: 260px; height: 260px; left: -120px; bottom: -100px; border-color: rgba(243,207,87,.35); }
@@ -728,7 +729,7 @@ h3 { line-height: 1.15; }
 @media (max-width: 900px) {
   .home-pillar-grid { grid-template-columns: repeat(2, 1fr); }
   .home-mission-grid, .home-community-grid { grid-template-columns: 1fr; gap: 50px; }
-  .official-logo-stage { min-height: 500px; }
+  .home-carousel { min-height: 0; }
 }
 
 @media (min-width: 821px) and (max-width: 1050px) {
@@ -740,14 +741,14 @@ h3 { line-height: 1.15; }
   .nav-links > a { display: block; }
   .nav-contact { margin-left: 0; margin-top: 8px; }
   .simple-home-hero .home-hero-grid { min-height: 0; }
-  .official-logo-stage { min-height: 480px; }
+  .home-carousel { min-height: 0; }
   .cta-band-inner > .button { justify-self: start; }
 }
 
 @media (max-width: 560px) {
   .brand-image { width: 50px; height: 42px; }
   .brand-name { font-size: 1.2rem; }
-  .official-logo-stage { min-height: 390px; border-radius: 28px 28px 42% 28px; }
+  .home-carousel { min-height: 0; }
   .home-pillar-grid { grid-template-columns: 1fr; }
   .home-pillar-grid article { min-height: 220px; }
   .mission-poster { min-height: 420px; padding: 28px; }

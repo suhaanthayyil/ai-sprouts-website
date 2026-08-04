@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Logo } from "@/components/logo";
+import { HomeCarousel } from "@/components/home-carousel";
 import { ContactBand, Eyebrow } from "@/components/ui";
 import { learningPillars } from "@/content/site-data";
 
@@ -21,11 +21,7 @@ export default function HomePage() {
             <div className="button-row"><Link className="button button-primary" href="/mission">Our mission <span aria-hidden="true">→</span></Link><Link className="text-link" href="/contact">Contact us <span aria-hidden="true">↗</span></Link></div>
             <p className="trust-copy">For young learners, families, schools, libraries, and community partners.</p>
           </div>
-          <div className="official-logo-stage">
-            <span className="logo-orbit logo-orbit-one" aria-hidden="true" />
-            <span className="logo-orbit logo-orbit-two" aria-hidden="true" />
-            <Logo hero />
-          </div>
+          <HomeCarousel />
         </div>
         <div className="hero-marquee" aria-hidden="true"><span>CURIOUS MINDS</span><i>✦</i><span>CREATIVE CODE</span><i>✦</i><span>RESPONSIBLE AI</span><i>✦</i><span>YOUNG CREATORS</span></div>
       </section>
