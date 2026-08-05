@@ -18,7 +18,7 @@ export function HomeCarousel() {
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const timer = window.setInterval(() => setPosition((current) => current + 1), 5000);
+    const timer = window.setInterval(() => setPosition((current) => current + 1), 2000);
     return () => window.clearInterval(timer);
   }, []);
 
