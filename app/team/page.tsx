@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { ContactBand, Eyebrow, PageHero } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Our Team",
   description: "Meet the people helping young minds grow at AI Sprouts.",
 };
-
-const teamSlots = ["Founder or director", "Educator or mentor", "Community partner"];
 
 export default function TeamPage() {
   return (
@@ -20,23 +19,29 @@ export default function TeamPage() {
         <div className="container">
           <div className="section-heading">
             <Eyebrow>Meet the team</Eyebrow>
-            <h2>Photos and introductions coming soon.</h2>
-            <p>Each profile is ready for a portrait, name, role, and short introduction when the team is ready to be featured.</p>
+            <h2>Meet the people growing AI Sprouts.</h2>
+            <p>Our team brings curiosity, practical experience, and a shared belief that young people should help shape the future of technology.</p>
           </div>
           <div className="team-grid">
-            {teamSlots.map((role, index) => (
-              <article className="team-card team-card-placeholder" key={role}>
-                <figure className={`media-frame team-photo-placeholder tone-${["green", "yellow", "lavender"][index]}`}>
-                  <span className="team-photo-icon" aria-hidden="true"><i /><b /></span>
-                  <figcaption>Portrait coming soon</figcaption>
-                </figure>
-                <span>{role}</span>
-                <h2>Team member name</h2>
-                <p>A short introduction, background, and connection to AI Sprouts will appear here.</p>
-              </article>
-            ))}
+            <article className="team-card">
+              <figure className="media-frame team-photo-real">
+                <Image src="/suhaan-thayyil.png" alt="Portrait of Suhaan Thayyil" fill priority sizes="(max-width: 820px) calc(100vw - 40px), 50vw" />
+              </figure>
+              <span>President</span>
+              <h2>Suhaan Thayyil</h2>
+              <p>I&apos;m a high school sophomore at Marvin Ridge High School passionate about using AI and machine learning to solve real-world problems.</p>
+            </article>
+            <article className="team-card team-card-placeholder">
+              <figure className="media-frame team-photo-placeholder tone-yellow">
+                <span className="team-photo-icon" aria-hidden="true"><i /><b /></span>
+                <figcaption>Portrait coming soon</figcaption>
+              </figure>
+              <span>Future team member</span>
+              <h2>Team member name</h2>
+              <p>A short introduction, background, and connection to AI Sprouts will appear here.</p>
+            </article>
           </div>
-          <p className="placeholder-disclosure">This page is intentionally using placeholders until team photos and biographies are added.</p>
+          <p className="placeholder-disclosure">One additional profile is reserved for a future team member.</p>
         </div>
       </section>
       <ContactBand />

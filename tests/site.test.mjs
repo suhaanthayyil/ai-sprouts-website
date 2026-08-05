@@ -29,6 +29,16 @@ test("navigation exposes Home, Mission, and Our Team without duplicating the Let
   assert.doesNotMatch(data, /label: "Contact Us"|Programs|Events|Gallery/);
 });
 
+test("team page includes Suhaan's profile and one future member placeholder", async () => {
+  const team = await readFile(new URL("app/team/page.tsx", root), "utf8");
+  assert.match(team, /Suhaan Thayyil/);
+  assert.match(team, /President/);
+  assert.match(team, /Marvin Ridge High School/);
+  assert.match(team, /suhaan-thayyil\.png/);
+  assert.equal((team.match(/team-card-placeholder/g) ?? []).length, 1);
+  await access(new URL("public/suhaan-thayyil.png", root));
+});
+
 test("contact form and endpoint include validation, consent, spam protection, and rate limiting", async () => {
   const [form, endpoint] = await Promise.all([readFile(new URL("components/interest-form.tsx", root), "utf8"), readFile(new URL("app/api/forms/route.ts", root), "utf8")]);
   assert.match(form, /required/);
