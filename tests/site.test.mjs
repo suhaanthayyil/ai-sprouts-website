@@ -45,6 +45,8 @@ test("ambassador application stays in the site through an embedded Google Form",
   const [page, embed] = await Promise.all([readFile(new URL("app/ambassador-program/page.tsx", root), "utf8"), readFile(new URL("components/google-form-embed.tsx", root), "utf8")]);
   assert.match(page, /ambassadorFormId/);
   assert.match(page, /GoogleFormEmbed/);
+  assert.match(page, /upload your resume directly from your computer/i);
+  assert.match(page, /Google requires applicants to sign in/i);
   assert.match(embed, /embedded=true/);
   assert.match(embed, /<iframe/);
 });

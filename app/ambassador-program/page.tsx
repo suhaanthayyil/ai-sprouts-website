@@ -20,8 +20,9 @@ export default function AmbassadorProgramPage() {
             <h2>Help good ideas take root.</h2>
             <p>We’re looking for curious, dependable students who want to represent AI Sprouts and create positive impact in their communities.</p>
             <ul><li>Champion responsible AI learning</li><li>Share ideas from your school community</li><li>Support workshops and outreach</li><li>Grow as a student leader</li></ul>
+            <p className="form-note">You can upload your resume directly from your computer. Google requires applicants to sign in before uploading a file.</p>
           </aside>
-          <GoogleFormEmbed formId={ambassadorFormId} title="AI Sprouts Ambassador Program application" height={1240} />
+          <GoogleFormEmbed formId={ambassadorFormId} title="AI Sprouts Ambassador Program application" height={1420} />
         </div>
       </section>
     </>
