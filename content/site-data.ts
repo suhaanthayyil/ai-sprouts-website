@@ -1,7 +1,7 @@
 export const organization = {
   name: "AI Sprouts",
   tagline: "Growing Young Minds",
-  email: "hello@aisprouts.org",
+  email: "aisproutsofficial@gmail.com",
   mission:
     "AI Sprouts helps young people become thoughtful creators through practical, creative, and responsible experiences with artificial intelligence and technology.",
 };
@@ -10,6 +10,8 @@ export const navigation = [
   { label: "Home", href: "/" },
   { label: "Mission", href: "/mission" },
   { label: "Our Team", href: "/team" },
+  { label: "Ambassador Program", href: "/ambassador-program" },
+  { label: "Map", href: "/map" },
 ];
 
 export const learningPillars = [

@@ -4,8 +4,8 @@ import test from "node:test";
 
 const root = new URL("../", import.meta.url);
 
-test("contains the four requested public pages", async () => {
-  await Promise.all([access(new URL("app/page.tsx", root)), access(new URL("app/mission/page.tsx", root)), access(new URL("app/team/page.tsx", root)), access(new URL("app/contact/page.tsx", root))]);
+test("contains the requested public pages", async () => {
+  await Promise.all([access(new URL("app/page.tsx", root)), access(new URL("app/mission/page.tsx", root)), access(new URL("app/team/page.tsx", root)), access(new URL("app/contact/page.tsx", root)), access(new URL("app/ambassador-program/page.tsx", root)), access(new URL("app/map/page.tsx", root))]);
   await assert.rejects(access(new URL("app/programs/page.tsx", root)));
   await assert.rejects(access(new URL("app/events/page.tsx", root)));
 });
@@ -26,7 +26,27 @@ test("navigation exposes Home, Mission, and Our Team without duplicating the Let
   assert.match(data, /label: "Home"/);
   assert.match(data, /label: "Mission"/);
   assert.match(data, /label: "Our Team"/);
+  assert.match(data, /label: "Ambassador Program"/);
+  assert.match(data, /label: "Map"/);
   assert.doesNotMatch(data, /label: "Contact Us"|Programs|Events|Gallery/);
+});
+
+test("chapter map includes every current location with accessible interactions", async () => {
+  const map = await readFile(new URL("components/chapter-map.tsx", root), "utf8");
+  for (const location of ["Coimbatore", "Charlotte", "Waxhaw", "Mint Hill", "Frisco", "New Albany"]) assert.match(map, new RegExp(location));
+  assert.match(map, /world-atlas\/countries-110m\.json/);
+  assert.match(map, /onMouseEnter/);
+  assert.match(map, /onFocus/);
+  assert.match(map, /aria-live="polite"/);
+  assert.match(map, /chapters: 3/);
+});
+
+test("ambassador application stays in the site through an embedded Google Form", async () => {
+  const [page, embed] = await Promise.all([readFile(new URL("app/ambassador-program/page.tsx", root), "utf8"), readFile(new URL("components/google-form-embed.tsx", root), "utf8")]);
+  assert.match(page, /ambassadorFormId/);
+  assert.match(page, /GoogleFormEmbed/);
+  assert.match(embed, /embedded=true/);
+  assert.match(embed, /<iframe/);
 });
 
 test("team page includes Suhaan's profile and one future member placeholder", async () => {
@@ -39,14 +59,11 @@ test("team page includes Suhaan's profile and one future member placeholder", as
   await access(new URL("public/suhaan-thayyil.png", root));
 });
 
-test("contact form and endpoint include validation, consent, spam protection, and rate limiting", async () => {
-  const [form, endpoint] = await Promise.all([readFile(new URL("components/interest-form.tsx", root), "utf8"), readFile(new URL("app/api/forms/route.ts", root), "utf8")]);
-  assert.match(form, /required/);
-  assert.match(form, /honeypot/);
-  assert.match(form, /name="consent"/);
-  assert.match(endpoint, /submissions/);
-  assert.match(endpoint, /status: 429/);
-  assert.match(endpoint, /accepted-no-persistence/);
+test("contact page uses its own embedded Google Form", async () => {
+  const page = await readFile(new URL("app/contact/page.tsx", root), "utf8");
+  assert.match(page, /contactFormId/);
+  assert.match(page, /GoogleFormEmbed/);
+  assert.match(page, /1FAIpQLSfASL_O/);
 });
 
 test("includes accessible navigation and reduced-motion support", async () => {

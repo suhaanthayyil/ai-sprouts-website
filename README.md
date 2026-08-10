@@ -1,9 +1,12 @@
 # AI Sprouts website
 
-A standard local Next.js website with three public pages:
+A standard local Next.js website with six public pages:
 
 - `/` — Home
 - `/mission` — Mission
+- `/team` — Our Team
+- `/ambassador-program` — Ambassador Program application
+- `/map` — Interactive chapter map
 - `/contact` — Contact Us
 
 The site uses the supplied, background-removed AI Sprouts artwork at `public/ai-sprouts-logo-transparent.png` in the navigation, home hero, favicon, and footer.
@@ -40,13 +43,15 @@ npm run build
 - `app/page.tsx` — Home page
 - `app/mission/page.tsx` — Mission page
 - `app/contact/page.tsx` — Contact page
-- `app/api/forms/route.ts` — Contact form validation and rate limiting
+- `app/ambassador-program/page.tsx` — Embedded ambassador application
+- `app/map/page.tsx` — World map of current chapter locations
+- `components/google-form-embed.tsx` — Embedded Google Forms used by the contact and ambassador pages
 - `components/` — Header, footer, logo, shared page elements, and contact form
 - `content/site-data.ts` — Central organization, navigation, and mission content
 - `app/globals.css` — Responsive visual system
 
-## Contact form
+## Form submissions
 
-The contact form validates submissions, includes a honeypot, consent check, accessible states, and basic per-IP rate limiting. It intentionally does not persist or email messages yet. Connect an approved email or CRM provider before public use.
+The contact and ambassador forms are Google Forms embedded directly in the website. They are owned by `aisproutsofficial@gmail.com`, with email notifications enabled for new responses. Ambassador applicants provide a required shareable Google Drive or Dropbox résumé link so the full application can remain embedded in the site.
 
-No environment variables are required for the current local version.
+No email API keys or environment variables are required.
