@@ -40,8 +40,10 @@ test("chapter map includes every current location with accessible interactions",
   assert.match(map, /onMouseEnter/);
   assert.match(map, /onFocus/);
   assert.match(map, /onClick/);
-  assert.match(map, /role={isInteractive \? "button"/);
-  assert.match(map, /States and regions/);
+  assert.match(map, /role="button"/);
+  assert.match(map, /tabIndex={0}/);
+  assert.match(map, /activeChapterCountry\?\.chapters \?\? 0/);
+  assert.doesNotMatch(map, /Selected country/);
   assert.match(map, /aria-live="polite"/);
   assert.match(map, /chapters: 3/);
 });
