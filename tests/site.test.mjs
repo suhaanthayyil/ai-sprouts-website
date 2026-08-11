@@ -5,7 +5,7 @@ import test from "node:test";
 const root = new URL("../", import.meta.url);
 
 test("contains the requested public pages", async () => {
-  await Promise.all([access(new URL("app/page.tsx", root)), access(new URL("app/mission/page.tsx", root)), access(new URL("app/team/page.tsx", root)), access(new URL("app/contact/page.tsx", root)), access(new URL("app/ambassador-program/page.tsx", root)), access(new URL("app/map/page.tsx", root))]);
+  await Promise.all([access(new URL("app/page.tsx", root)), access(new URL("app/mission/page.tsx", root)), access(new URL("app/team/page.tsx", root)), access(new URL("app/contact/page.tsx", root)), access(new URL("app/ambassador-program/page.tsx", root)), access(new URL("app/chapters/page.tsx", root)), access(new URL("app/map/page.tsx", root))]);
   await assert.rejects(access(new URL("app/programs/page.tsx", root)));
   await assert.rejects(access(new URL("app/events/page.tsx", root)));
 });
@@ -27,7 +27,9 @@ test("navigation exposes Home, Mission, and Our Team without duplicating the Let
   assert.match(data, /label: "Mission"/);
   assert.match(data, /label: "Our Team"/);
   assert.match(data, /label: "Ambassador Program"/);
-  assert.match(data, /label: "Map"/);
+  assert.match(data, /label: "Chapters"/);
+  assert.match(data, /href: "\/chapters"/);
+  assert.doesNotMatch(data, /label: "Map"/);
   assert.doesNotMatch(data, /label: "Contact Us"|Programs|Events|Gallery/);
 });
 
@@ -37,6 +39,9 @@ test("chapter map includes every current location with accessible interactions",
   assert.match(map, /world-atlas\/countries-110m\.json/);
   assert.match(map, /onMouseEnter/);
   assert.match(map, /onFocus/);
+  assert.match(map, /onClick/);
+  assert.match(map, /role={isInteractive \? "button"/);
+  assert.match(map, /States and regions/);
   assert.match(map, /aria-live="polite"/);
   assert.match(map, /chapters: 3/);
 });
@@ -66,6 +71,9 @@ test("contact page uses its own embedded Google Form", async () => {
   assert.match(page, /contactFormId/);
   assert.match(page, /GoogleFormEmbed/);
   assert.match(page, /1FAIpQLSfASL_O/);
+  assert.match(page, /Get in touch/);
+  assert.match(page, /send us a message below/i);
+  assert.doesNotMatch(page, /Contact us/);
 });
 
 test("includes accessible navigation and reduced-motion support", async () => {

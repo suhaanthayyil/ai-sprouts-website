@@ -30,7 +30,10 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
-          <Link className="button button-primary nav-contact" href="/contact" onClick={() => setOpen(false)}>Let’s talk <span aria-hidden="true">→</span></Link>
+          <Link className="button button-primary nav-contact" href="/contact" onClick={() => setOpen(false)}>
+            <span>Let’s talk</span>
+            <span className="nav-contact-arrow" aria-hidden="true">→</span>
+          </Link>
         </nav>
       </div>
     </header>

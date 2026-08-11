@@ -11,7 +11,7 @@ export const navigation = [
   { label: "Mission", href: "/mission" },
   { label: "Our Team", href: "/team" },
   { label: "Ambassador Program", href: "/ambassador-program" },
-  { label: "Map", href: "/map" },
+  { label: "Chapters", href: "/chapters" },
 ];
 
 export const learningPillars = [
