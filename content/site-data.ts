@@ -2,6 +2,7 @@ export const organization = {
   name: "AI Sprouts",
   tagline: "Growing Young Minds",
   email: "aisproutsofficial@gmail.com",
+  instagram: "https://www.instagram.com/aisproutsofficial/",
   mission:
     "AI Sprouts helps young people become thoughtful creators through practical, creative, and responsible experiences with artificial intelligence and technology.",
 };

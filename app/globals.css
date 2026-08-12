@@ -479,6 +479,11 @@ h3 { line-height: 1.15; }
 .form-layout aside h2 { color: white; font-size: 2.1rem; margin: 18px 0 25px; }
 .form-layout aside ul { padding-left: 20px; margin: 0; color: #d8e6de; font-size: .84rem; }
 .form-layout aside li { margin-bottom: 12px; }
+.contact-instagram { margin-top: 30px; padding: 20px; display: grid; grid-template-columns: 42px 1fr; gap: 14px; border-radius: 16px; background: var(--yellow); color: var(--forest); }
+.contact-instagram > span { width: 42px; height: 42px; display: grid; place-items: center; border: 1.5px solid var(--forest); border-radius: 13px; font-size: 1.55rem; line-height: 1; }
+.contact-instagram strong { display: block; font-family: var(--font-display), Georgia, serif; font-size: 1.25rem; line-height: 1.1; }
+.contact-instagram p { margin: 7px 0 12px; color: #455b4e; font-size: .76rem; line-height: 1.45; }
+.contact-instagram a { display: inline-flex; align-items: center; gap: 6px; color: var(--forest) !important; font-size: .8rem; font-weight: 850; text-decoration: none !important; border-bottom: 1.5px solid var(--forest); }
 .interest-form { padding: 42px; background: var(--cream); border: 1px solid var(--line); border-radius: 22px; }
 .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 18px; }
 .interest-form label { display: block; font-size: .77rem; color: var(--forest); font-weight: 800; }

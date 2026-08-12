@@ -69,12 +69,15 @@ test("team page includes Suhaan's profile and one future member placeholder", as
 });
 
 test("contact page uses its own embedded Google Form", async () => {
-  const page = await readFile(new URL("app/contact/page.tsx", root), "utf8");
+  const [page, data] = await Promise.all([readFile(new URL("app/contact/page.tsx", root), "utf8"), readFile(new URL("content/site-data.ts", root), "utf8")]);
   assert.match(page, /contactFormId/);
   assert.match(page, /GoogleFormEmbed/);
   assert.match(page, /1FAIpQLSfASL_O/);
   assert.match(page, /Get in touch/);
   assert.match(page, /send us a message below/i);
+  assert.match(page, /Follow our journey/);
+  assert.match(page, /@aisproutsofficial/);
+  assert.match(data, /instagram: "https:\/\/www\.instagram\.com\/aisproutsofficial\/"/);
   assert.doesNotMatch(page, /Contact us/);
 });
 
