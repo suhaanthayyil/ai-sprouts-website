@@ -58,12 +58,15 @@ test("ambassador application stays in the site through an embedded Google Form",
   assert.match(embed, /<iframe/);
 });
 
-test("team page includes Suhaan's profile and one future member placeholder", async () => {
+test("team page includes Suhaan and Kairav's profiles", async () => {
   const team = await readFile(new URL("app/team/page.tsx", root), "utf8");
   assert.match(team, /Suhaan Thayyil/);
   assert.match(team, /President/);
   assert.match(team, /Marvin Ridge High School/);
   assert.match(team, /suhaan-thayyil\.png/);
+  assert.match(team, /Kairav Karunakaran/);
+  assert.match(team, /Senior Vice President/);
+  assert.match(team, /potential to transform how we learn, create, and solve problems/);
   assert.equal((team.match(/team-card-placeholder/g) ?? []).length, 1);
   await access(new URL("public/suhaan-thayyil.png", root));
 });

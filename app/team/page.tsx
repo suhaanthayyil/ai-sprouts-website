@@ -36,12 +36,12 @@ export default function TeamPage() {
                 <span className="team-photo-icon" aria-hidden="true"><i /><b /></span>
                 <figcaption>Portrait coming soon</figcaption>
               </figure>
-              <span>Future team member</span>
-              <h2>Team member name</h2>
-              <p>A short introduction, background, and connection to AI Sprouts will appear here.</p>
+              <span>Senior Vice President</span>
+              <h2>Kairav Karunakaran</h2>
+              <p>I&apos;m passionate about artificial intelligence and its potential to transform how we learn, create, and solve problems. Through education and hands-on experiences, I hope to make AI more accessible and inspire other students to explore the possibilities of technology.</p>
             </article>
           </div>
-          <p className="placeholder-disclosure">One additional profile is reserved for a future team member.</p>
+          <p className="placeholder-disclosure">Kairav&apos;s portrait will be added soon.</p>
         </div>
       </section>
       <ContactBand />
