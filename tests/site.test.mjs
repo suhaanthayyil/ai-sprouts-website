@@ -45,7 +45,7 @@ test("chapters explorer contains only the United States and India with complete 
     readFile(new URL("public/us-states.geojson", root), "utf8"),
     readFile(new URL("public/india-states.geojson", root), "utf8"),
   ]);
-  for (const location of ["Coimbatore", "Charlotte", "Waxhaw", "Mint Hill", "Frisco", "New Albany"]) assert.match(map, new RegExp(location));
+  for (const location of ["Coimbatore", "Port Blair", "Kozhikode", "Hyderabad", "New Delhi", "Charlotte", "Waxhaw", "Mint Hill", "Frisco", "New Albany"]) assert.match(map, new RegExp(location));
   for (const state of ["Alabama", "Alaska", "North Carolina", "Wyoming", "Tamil Nadu"]) assert.match(map, new RegExp(state));
   assert.match(map, /country="United States"/);
   assert.match(map, /country="India"/);

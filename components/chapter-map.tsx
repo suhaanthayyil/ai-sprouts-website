@@ -21,7 +21,11 @@ const chapterCities: Record<string, string[]> = {
   "United States:North Carolina": ["Charlotte", "Waxhaw", "Mint Hill"],
   "United States:Ohio": ["New Albany"],
   "United States:Texas": ["Frisco"],
+  "India:Andaman and Nicobar Islands": ["Port Blair"],
+  "India:Delhi": ["New Delhi"],
+  "India:Kerala": ["Kozhikode"],
   "India:Tamil Nadu": ["Coimbatore"],
+  "India:Telangana": ["Hyderabad"],
 };
 
 function normalizeName(name: string) {

@@ -13,7 +13,7 @@ export default function ChaptersPage() {
       <section className="map-hero">
         <div className="container map-hero-grid">
           <div><Eyebrow>Our growing community</Eyebrow><h1>Two countries. One growing learning community.</h1></div>
-          <div className="map-hero-stats"><strong>6</strong><span>chapters across the United States and India</span></div>
+          <div className="map-hero-stats"><strong>10</strong><span>chapters across the United States and India</span></div>
         </div>
       </section>
       <section className="section map-section">
