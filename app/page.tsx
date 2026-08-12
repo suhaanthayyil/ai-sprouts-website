@@ -30,7 +30,7 @@ export default function HomePage() {
         <div className="container">
           <div className="section-heading"><Eyebrow>What we nurture</Eyebrow><h2>Big ideas, made wonderfully hands-on.</h2><p>Students gain confidence by understanding a concept, trying it for themselves, and reflecting on how technology affects people.</p></div>
           <div className="home-pillar-grid">
-            {learningPillars.map((pillar) => <article key={pillar.title}><span>{pillar.number}</span><h3>{pillar.title}</h3><p>{pillar.text}</p></article>)}
+            {learningPillars.map((pillar) => <article key={pillar.title}><div className="pillar-card-top"><span>{pillar.number}</span><i aria-hidden="true">{pillar.icon}</i></div><h3>{pillar.title}</h3><p>{pillar.text}</p></article>)}
           </div>
         </div>
       </section>

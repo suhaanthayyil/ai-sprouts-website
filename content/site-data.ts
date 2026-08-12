@@ -18,21 +18,25 @@ export const navigation = [
 export const learningPillars = [
   {
     number: "01",
+    icon: "◎",
     title: "Understand",
     text: "Make artificial intelligence approachable through clear, age-appropriate explanations.",
   },
   {
     number: "02",
+    icon: "✦",
     title: "Create",
     text: "Turn curiosity into stories, code, prototypes, and projects with a purpose.",
   },
   {
     number: "03",
+    icon: "?",
     title: "Question",
     text: "Practice privacy, fairness, source-checking, and thoughtful decision-making.",
   },
   {
     number: "04",
+    icon: "∞",
     title: "Grow together",
     text: "Build confidence through teamwork, reflection, and sharing ideas with others.",
   },

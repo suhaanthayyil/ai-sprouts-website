@@ -21,6 +21,12 @@ test("uses the supplied AI Sprouts logo in navigation and workshop carousel on t
   await Promise.all(Array.from({ length: 5 }, (_, index) => access(new URL(`public/workshop-0${index + 1}.png`, root))));
 });
 
+test("home learning pillars include themed representative icons", async () => {
+  const [home, data] = await Promise.all([readFile(new URL("app/page.tsx", root), "utf8"), readFile(new URL("content/site-data.ts", root), "utf8")]);
+  assert.match(home, /pillar-card-top/);
+  for (const icon of ["◎", "✦", "?", "∞"]) assert.ok(data.includes(`icon: "${icon}"`));
+});
+
 test("navigation exposes Home, Mission, and Our Team without duplicating the Let's talk destination", async () => {
   const data = await readFile(new URL("content/site-data.ts", root), "utf8");
   assert.match(data, /label: "Home"/);

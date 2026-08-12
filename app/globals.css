@@ -770,6 +770,12 @@ h3 { line-height: 1.15; }
 .home-pillar-grid article:nth-child(3) { background: #eee9f7; }
 .home-pillar-grid article:nth-child(4) { background: #f8e0d8; }
 .home-pillar-grid span { color: var(--green); font-size: .66rem; font-weight: 850; letter-spacing: .12em; }
+.pillar-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; }
+.pillar-card-top i { width: 62px; height: 62px; flex: none; display: grid; place-items: center; border: 1.5px solid var(--forest); border-radius: 18px; background: rgba(255,255,255,.5); box-shadow: 3px 3px 0 rgba(21,63,46,.14); color: var(--forest); font-family: var(--font-display), Georgia, serif; font-size: 2rem; font-style: normal; font-weight: 650; line-height: 1; }
+.home-pillar-grid article:nth-child(1) .pillar-card-top i { background: var(--yellow); }
+.home-pillar-grid article:nth-child(2) .pillar-card-top i { background: #c8e8f1; }
+.home-pillar-grid article:nth-child(3) .pillar-card-top i { background: #d9cdf3; }
+.home-pillar-grid article:nth-child(4) .pillar-card-top i { background: #f2b39f; }
 .home-pillar-grid h3 { margin: auto 0 12px; color: var(--forest); font-family: var(--font-display), Georgia, serif; font-size: 1.55rem; }
 .home-pillar-grid p { color: var(--muted); font-size: .86rem; margin: 0; }
 .home-mission-section { background: var(--forest-deep); color: white; }
