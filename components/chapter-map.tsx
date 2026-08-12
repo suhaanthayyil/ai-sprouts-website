@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { geoAlbersUsa, geoMercator, geoPath } from "d3-geo";
-import type { Feature, FeatureCollection, Geometry, GeoJsonProperties } from "geojson";
+import type { Feature, FeatureCollection, Geometry, GeoJsonProperties, MultiPolygon, Polygon } from "geojson";
 
 type StateFeature = Feature<Geometry, GeoJsonProperties> & { properties: { shapeName?: string } };
 
@@ -28,6 +28,18 @@ function normalizeName(name: string) {
   return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
+function rewindGeometry(geometry: Geometry): Geometry {
+  if (geometry.type === "Polygon") {
+    const polygon = geometry as Polygon;
+    return { ...polygon, coordinates: polygon.coordinates.map((ring) => [...ring].reverse()) };
+  }
+  if (geometry.type === "MultiPolygon") {
+    const multiPolygon = geometry as MultiPolygon;
+    return { ...multiPolygon, coordinates: multiPolygon.coordinates.map((polygon) => polygon.map((ring) => [...ring].reverse())) };
+  }
+  return geometry;
+}
+
 function CountryMap({ country, dataUrl, initialState, filter }: { country: "United States" | "India"; dataUrl: string; initialState: string; filter?: Set<string> }) {
   const [features, setFeatures] = useState<StateFeature[]>([]);
   const [selected, setSelected] = useState(initialState);
@@ -35,19 +47,23 @@ function CountryMap({ country, dataUrl, initialState, filter }: { country: "Unit
   useEffect(() => {
     let active = true;
     fetch(dataUrl)
-      .then((response) => response.json() as Promise<FeatureCollection<Geometry>>)
+      .then((response) => {
+        if (!response.ok) throw new Error(`Unable to load ${country} map data.`);
+        return response.json() as Promise<FeatureCollection<Geometry>>;
+      })
       .then((collection) => {
         if (!active) return;
         const states = collection.features
-          .map((feature) => ({ ...feature, properties: feature.properties ?? {} }) as StateFeature)
+          .map((feature) => ({ ...feature, geometry: rewindGeometry(feature.geometry), properties: feature.properties ?? {} }) as StateFeature)
           .filter((feature) => {
             const name = normalizeName(feature.properties.shapeName ?? "");
             return name && (!filter || filter.has(name));
           });
         setFeatures(states);
-      });
+      })
+      .catch(() => { if (active) setFeatures([]); });
     return () => { active = false; };
-  }, [dataUrl, filter]);
+  }, [country, dataUrl, filter]);
 
   const paths = useMemo(() => {
     if (!features.length) return [];

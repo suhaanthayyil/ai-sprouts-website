@@ -53,6 +53,8 @@ test("chapters explorer contains only the United States and India with complete 
   assert.match(map, /india-states\.geojson/);
   assert.match(map, /geoAlbersUsa/);
   assert.match(map, /geoMercator/);
+  assert.match(map, /rewindGeometry/);
+  assert.match(map, /\.reverse\(\)/);
   assert.match(map, /onMouseEnter/);
   assert.match(map, /onFocus/);
   assert.match(map, /onClick/);
