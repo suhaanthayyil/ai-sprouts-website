@@ -37,13 +37,13 @@ export default function HomePage() {
 
       <section className="section home-mission-section">
         <div className="container home-mission-grid">
-          <div className="mission-poster"><span>OUR WHY</span><strong>Young people should shape technology—not just scroll through it.</strong><i>AI SPROUTS · GROWING YOUNG MINDS</i></div>
+          <div className="mission-poster"><span>OUR WHY</span><strong>Young people should shape technology, not just scroll through it.</strong><i>AI SPROUTS · GROWING YOUNG MINDS</i></div>
           <div><Eyebrow>Our mission</Eyebrow><h2>Thoughtful creators grow through practice.</h2><p>We make emerging technology approachable without pretending it is magic. Young people learn to question results, protect privacy, work with others, and build things that express their own ideas.</p><Link className="button button-dark" href="/mission">Read our mission <span aria-hidden="true">→</span></Link></div>
         </div>
       </section>
 
       <section className="section home-community-section">
-        <div className="container home-community-grid"><div><Eyebrow>Rooted in community</Eyebrow><h2>Learning grows stronger together.</h2></div><div><p>AI Sprouts is designed to meet young people in the spaces where they already learn and belong—alongside families, educators, libraries, schools, and community organizations.</p><Link href="/contact">Start a conversation <span aria-hidden="true">→</span></Link></div></div>
+        <div className="container home-community-grid"><div><Eyebrow>Rooted in community</Eyebrow><h2>Learning grows stronger together.</h2></div><div><p>AI Sprouts is designed to meet young people in the spaces where they already learn and belong, alongside families, educators, libraries, schools, and community organizations.</p><Link href="/contact">Start a conversation <span aria-hidden="true">→</span></Link></div></div>
       </section>
       <ContactBand />
     </>

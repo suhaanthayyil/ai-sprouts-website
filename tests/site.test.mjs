@@ -13,7 +13,7 @@ test("contains the requested public pages", async () => {
 test("uses the supplied AI Sprouts logo in navigation and workshop carousel on the home hero", async () => {
   const [logo, home, carousel] = await Promise.all([readFile(new URL("components/logo.tsx", root), "utf8"), readFile(new URL("app/page.tsx", root), "utf8"), readFile(new URL("components/home-carousel.tsx", root), "utf8")]);
   assert.match(logo, /ai-sprouts-logo-transparent\.png/);
-  assert.match(logo, /AI Sprouts — Growing Young Minds/);
+  assert.match(logo, /AI Sprouts, Growing Young Minds/);
   assert.match(home, /<HomeCarousel/);
   assert.match(carousel, /workshop-01\.png/);
   assert.match(carousel, /workshop-05\.png/);

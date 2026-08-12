@@ -2,12 +2,12 @@
 
 A standard local Next.js website with six public pages:
 
-- `/` — Home
-- `/mission` — Mission
-- `/team` — Our Team
-- `/ambassador-program` — Ambassador Program application
-- `/map` — Interactive chapter map
-- `/contact` — Contact Us
+- `/`: Home
+- `/mission`: Mission
+- `/team`: Our Team
+- `/ambassador-program`: Ambassador Program application
+- `/map`: Interactive chapter map
+- `/contact`: Contact Us
 
 The site uses the supplied, background-removed AI Sprouts artwork at `public/ai-sprouts-logo-transparent.png` in the navigation, home hero, favicon, and footer.
 
@@ -40,15 +40,15 @@ npm run build
 
 ## Architecture
 
-- `app/page.tsx` — Home page
-- `app/mission/page.tsx` — Mission page
-- `app/contact/page.tsx` — Contact page
-- `app/ambassador-program/page.tsx` — Embedded ambassador application
-- `app/map/page.tsx` — World map of current chapter locations
-- `components/google-form-embed.tsx` — Embedded Google Forms used by the contact and ambassador pages
-- `components/` — Header, footer, logo, shared page elements, and contact form
-- `content/site-data.ts` — Central organization, navigation, and mission content
-- `app/globals.css` — Responsive visual system
+- `app/page.tsx`: Home page
+- `app/mission/page.tsx`: Mission page
+- `app/contact/page.tsx`: Contact page
+- `app/ambassador-program/page.tsx`: Embedded ambassador application
+- `app/map/page.tsx`: World map of current chapter locations
+- `components/google-form-embed.tsx`: Embedded Google Forms used by the contact and ambassador pages
+- `components/`: Header, footer, logo, shared page elements, and contact form
+- `content/site-data.ts`: Central organization, navigation, and mission content
+- `app/globals.css`: Responsive visual system
 
 ## Form submissions
 

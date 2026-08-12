@@ -10,7 +10,7 @@ export function Logo({ hero = false }: { hero?: boolean }) {
         width={690}
         height={690}
         loading={hero ? "eager" : "lazy"}
-        alt="AI Sprouts — Growing Young Minds"
+        alt="AI Sprouts, Growing Young Minds"
       />
       {!hero && <span className="brand-name">AI Sprouts</span>}
     </Link>
