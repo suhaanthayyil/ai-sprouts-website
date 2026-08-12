@@ -1,153 +1,81 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { geoNaturalEarth1, geoPath } from "d3-geo";
-import countries from "i18n-iso-countries";
-import enLocale from "i18n-iso-countries/langs/en.json";
-import { feature } from "topojson-client";
-import type { FeatureCollection, Geometry } from "geojson";
-import type { GeometryCollection, Topology } from "topojson-specification";
-import worldAtlas from "world-atlas/countries-110m.json";
 
-countries.registerLocale(enLocale);
+type ChapterState = {
+  name: string;
+  cities: string[];
+};
 
-const mapWidth = 1000;
-const mapHeight = 520;
-
-const chapterCountries = [
-  { id: "united-states", atlasId: "840", name: "United States", chapters: 5 },
-  { id: "india", atlasId: "356", name: "India", chapters: 1 },
+const unitedStates = [
+  "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia",
+  "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland",
+  "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey",
+  "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina",
+  "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming",
 ] as const;
 
-const regions = [
-  { id: "north-carolina", state: "North Carolina", countryId: "united-states", country: "United States", chapters: 3, cities: ["Charlotte", "Waxhaw", "Mint Hill"] },
-  { id: "texas", state: "Texas", countryId: "united-states", country: "United States", chapters: 1, cities: ["Frisco"] },
-  { id: "ohio", state: "Ohio", countryId: "united-states", country: "United States", chapters: 1, cities: ["New Albany"] },
-  { id: "tamil-nadu", state: "Tamil Nadu", countryId: "india", country: "India", chapters: 1, cities: ["Coimbatore"] },
+const india = [
+  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
+  "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
+  "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal",
 ] as const;
 
-type Region = (typeof regions)[number];
+const chapterCities: Record<string, string[]> = {
+  "United States:North Carolina": ["Charlotte", "Waxhaw", "Mint Hill"],
+  "United States:Ohio": ["New Albany"],
+  "United States:Texas": ["Frisco"],
+  "India:Tamil Nadu": ["Coimbatore"],
+};
 
-export function ChapterMap() {
-  const [activeAtlasId, setActiveAtlasId] = useState("840");
-  const [activeRegionId, setActiveRegionId] = useState<Region["id"]>("north-carolina");
+function buildStates(country: string, names: readonly string[]): ChapterState[] {
+  return names.map((name) => ({ name, cities: chapterCities[`${country}:${name}`] ?? [] }));
+}
 
-  const mapCountries = useMemo(() => {
-    const topology = worldAtlas as unknown as Topology<{ countries: GeometryCollection }>;
-    const countryFeatures = feature(topology, topology.objects.countries) as FeatureCollection<Geometry>;
-    const projection = geoNaturalEarth1().fitExtent([[18, 18], [mapWidth - 18, mapHeight - 18]], countryFeatures);
-    const path = geoPath(projection);
-
-    return countryFeatures.features.map((country, index) => {
-      const atlasId = String(country.id ?? "").padStart(3, "0");
-      const chapterCountry = chapterCountries.find((item) => item.atlasId === atlasId);
-      const name = chapterCountry?.name ?? countries.getName(atlasId, "en") ?? `Country ${atlasId}`;
-      return { id: country.id ?? index, atlasId, name, path: path(country) ?? "", chapterCountry };
-    });
-  }, []);
-
-  const activeCountry = mapCountries.find((country) => country.atlasId === activeAtlasId) ?? mapCountries[0];
-  const activeChapterCountry = activeCountry.chapterCountry;
-  const activeChapterCount = activeChapterCountry?.chapters ?? 0;
-  const countryRegions = activeChapterCountry ? regions.filter((region) => region.countryId === activeChapterCountry.id) : [];
-  const activeRegion = countryRegions.find((region) => region.id === activeRegionId) ?? countryRegions[0];
-
-  const selectCountry = (atlasId: string) => {
-    const chapterCountry = chapterCountries.find((country) => country.atlasId === atlasId);
-    const firstRegion = chapterCountry ? regions.find((region) => region.countryId === chapterCountry.id) : undefined;
-    setActiveAtlasId(atlasId);
-    if (firstRegion) setActiveRegionId(firstRegion.id);
-  };
+function CountryPanel({ country, states, initialState }: { country: string; states: ChapterState[]; initialState: string }) {
+  const [selected, setSelected] = useState(initialState);
+  const [query, setQuery] = useState("");
+  const selectedState = states.find((state) => state.name === selected) ?? states[0];
+  const visibleStates = useMemo(() => states.filter((state) => state.name.toLowerCase().includes(query.toLowerCase())), [query, states]);
+  const chapterCount = states.reduce((total, state) => total + state.cities.length, 0);
 
   return (
-    <div className="chapters-explorer">
-      <div className="chapter-country-tabs" aria-label="Countries with active chapters">
-        {chapterCountries.map((country) => (
-          <button
-            className={country.atlasId === activeCountry.atlasId ? "is-active" : ""}
-            key={country.id}
-            type="button"
-            aria-pressed={country.atlasId === activeCountry.atlasId}
-            onClick={() => selectCountry(country.atlasId)}
-          >
-            <span>{country.name}</span>
-            <strong>{country.chapters} {country.chapters === 1 ? "chapter" : "chapters"}</strong>
-          </button>
-        ))}
-      </div>
-
-      <div className="chapter-map-layout">
-        <div className="chapter-map-canvas">
-          <svg className="chapter-world-map" viewBox={`0 0 ${mapWidth} ${mapHeight}`} role="img" aria-labelledby="chapter-map-title chapter-map-description">
-            <title id="chapter-map-title">AI Sprouts chapters by country</title>
-            <desc id="chapter-map-description">Every country can be hovered, focused, or selected. Countries without active AI Sprouts chapters show a count of zero.</desc>
-            <rect className="map-ocean" width={mapWidth} height={mapHeight} rx="26" />
-            <g className="map-graticule" aria-hidden="true"><path d="M18 130H982M18 260H982M18 390H982M250 18V502M500 18V502M750 18V502" /></g>
-            <g className="map-countries">
-              {mapCountries.map((country) => {
-                const chapterCount = country.chapterCountry?.chapters ?? 0;
-                const isActive = country.atlasId === activeCountry.atlasId;
-                return (
-                  <path
-                    className={`${chapterCount > 0 ? "has-chapters" : "is-empty"}${isActive ? " is-active" : ""}`}
-                    d={country.path}
-                    key={country.id}
-                    role="button"
-                    tabIndex={0}
-                    aria-label={`${country.name}: ${chapterCount} ${chapterCount === 1 ? "chapter" : "chapters"}`}
-                    onClick={() => selectCountry(country.atlasId)}
-                    onFocus={() => selectCountry(country.atlasId)}
-                    onMouseEnter={() => selectCountry(country.atlasId)}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter" || event.key === " ") {
-                        event.preventDefault();
-                        selectCountry(country.atlasId);
-                      }
-                    }}
-                  />
-                );
-              })}
-            </g>
-          </svg>
-          <p className="map-help">Hover, click, or tab to any country.</p>
+    <article className="country-chapter-panel">
+      <header>
+        <div><span>Country</span><h2>{country}</h2></div>
+        <strong>{chapterCount} {chapterCount === 1 ? "chapter" : "chapters"}</strong>
+      </header>
+      <label className="state-search">
+        <span className="sr-only">Search {country} states</span>
+        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search states" type="search" />
+      </label>
+      <div className="state-browser">
+        <div className="state-list" aria-label={`${country} states`}>
+          {visibleStates.map((state) => (
+            <button className={state.name === selectedState.name ? "is-active" : ""} key={state.name} type="button" onClick={() => setSelected(state.name)} aria-pressed={state.name === selectedState.name}>
+              <span>{state.name}</span><strong>{state.cities.length}</strong>
+            </button>
+          ))}
+          {visibleStates.length === 0 ? <p>No states match that search.</p> : null}
         </div>
-
-        <aside className="chapter-region-panel" aria-live="polite">
-          <div className="chapter-region-heading">
-            <span>Chapter locations</span>
-            <h2>{activeCountry.name}</h2>
-            <p className="chapter-country-count"><strong>{activeChapterCount}</strong> {activeChapterCount === 1 ? "chapter" : "chapters"}</p>
-          </div>
-
-          {activeRegion ? (
-            <>
-              <div className="chapter-region-list" aria-label={`Chapter regions in ${activeCountry.name}`}>
-                {countryRegions.map((region) => (
-                  <button
-                    className={region.id === activeRegion.id ? "is-active" : ""}
-                    key={region.id}
-                    type="button"
-                    aria-pressed={region.id === activeRegion.id}
-                    onClick={() => setActiveRegionId(region.id)}
-                    onFocus={() => setActiveRegionId(region.id)}
-                    onMouseEnter={() => setActiveRegionId(region.id)}
-                  >
-                    <span>{region.state}</span>
-                    <strong>{region.chapters}</strong>
-                  </button>
-                ))}
-              </div>
-              <div className="chapter-map-detail">
-                <p>{activeRegion.country}</p>
-                <h3>{activeRegion.state}</h3>
-                <strong>{activeRegion.chapters} {activeRegion.chapters === 1 ? "chapter" : "chapters"}</strong>
-                <span>Current cities</span>
-                <ul>{activeRegion.cities.map((city) => <li key={city}>{city}</li>)}</ul>
-              </div>
-            </>
-          ) : null}
-        </aside>
+        <div className="state-chapter-detail" aria-live="polite">
+          <span>{country}</span>
+          <h3>{selectedState.name}</h3>
+          {selectedState.cities.length > 0 ? <><strong>{selectedState.cities.length} active {selectedState.cities.length === 1 ? "chapter" : "chapters"}</strong><ul>{selectedState.cities.map((city) => <li key={city}>{city}</li>)}</ul></> : <p>No active chapters yet.</p>}
+        </div>
       </div>
+    </article>
+  );
+}
+
+export function ChapterMap() {
+  const usStates = useMemo(() => buildStates("United States", unitedStates), []);
+  const indiaStates = useMemo(() => buildStates("India", india), []);
+
+  return (
+    <div className="country-chapter-grid">
+      <CountryPanel country="United States" states={usStates} initialState="North Carolina" />
+      <CountryPanel country="India" states={indiaStates} initialState="Tamil Nadu" />
     </div>
   );
 }

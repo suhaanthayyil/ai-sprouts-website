@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { ReactNode } from "react";
 
 export function Eyebrow({ children }: { children: ReactNode }) {
@@ -10,22 +11,9 @@ export function PageHero({ eyebrow, title, body }: { eyebrow: string; title: str
     <section className="page-hero">
       <div className="container page-hero-grid">
         <div><Eyebrow>{eyebrow}</Eyebrow><h1>{title}</h1><p>{body}</p></div>
-        <div className="page-hero-garden" aria-hidden="true">
-          <span className="garden-ring garden-ring-one" />
-          <span className="garden-ring garden-ring-two" />
-          <span className="garden-flower">
-            <span className="flower-head">
-              <i className="flower-petal flower-petal-one" />
-              <i className="flower-petal flower-petal-two" />
-              <i className="flower-petal flower-petal-three" />
-              <i className="flower-petal flower-petal-four" />
-              <i className="flower-petal flower-petal-five" />
-              <i className="flower-center" />
-            </span>
-            <span className="garden-stem" />
-            <span className="garden-leaf garden-leaf-one" />
-            <span className="garden-leaf garden-leaf-two" />
-          </span>
+        <div className="page-hero-logo" aria-hidden="true">
+          <span className="page-hero-logo-ring" />
+          <Image src="/ai-sprouts-logo-transparent.png" alt="" width={640} height={640} priority />
           <em>learn • make • grow</em>
         </div>
       </div>

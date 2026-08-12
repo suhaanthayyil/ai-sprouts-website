@@ -39,19 +39,31 @@ test("navigation exposes Home, Mission, and Our Team without duplicating the Let
   assert.doesNotMatch(data, /label: "Contact Us"|Programs|Events|Gallery/);
 });
 
-test("chapter map includes every current location with accessible interactions", async () => {
+test("chapters explorer contains only the United States and India with complete state browsing", async () => {
   const map = await readFile(new URL("components/chapter-map.tsx", root), "utf8");
   for (const location of ["Coimbatore", "Charlotte", "Waxhaw", "Mint Hill", "Frisco", "New Albany"]) assert.match(map, new RegExp(location));
-  assert.match(map, /world-atlas\/countries-110m\.json/);
-  assert.match(map, /onMouseEnter/);
-  assert.match(map, /onFocus/);
+  for (const state of ["Alabama", "Alaska", "North Carolina", "Wyoming", "Andhra Pradesh", "Tamil Nadu", "West Bengal"]) assert.match(map, new RegExp(state));
+  assert.match(map, /country="United States"/);
+  assert.match(map, /country="India"/);
+  assert.match(map, /Search states/);
   assert.match(map, /onClick/);
-  assert.match(map, /role="button"/);
-  assert.match(map, /tabIndex={0}/);
-  assert.match(map, /activeChapterCountry\?\.chapters \?\? 0/);
-  assert.doesNotMatch(map, /Selected country/);
   assert.match(map, /aria-live="polite"/);
-  assert.match(map, /chapters: 3/);
+  assert.doesNotMatch(map, /world-atlas|geoNaturalEarth|mapCountries/);
+});
+
+test("shared page heroes use the official logo instead of the flower illustration", async () => {
+  const [ui, css] = await Promise.all([readFile(new URL("components/ui.tsx", root), "utf8"), readFile(new URL("app/globals.css", root), "utf8")]);
+  assert.match(ui, /ai-sprouts-logo-transparent\.png/);
+  assert.match(ui, /page-hero-logo/);
+  assert.doesNotMatch(ui, /garden-flower|flower-petal/);
+  assert.doesNotMatch(css, /garden-flower|flower-petal/);
+});
+
+test("mission aligns AI Sprouts with UN Sustainable Development Goal 4", async () => {
+  const mission = await readFile(new URL("app/mission/page.tsx", root), "utf8");
+  assert.match(mission, /UN SDG 4/);
+  assert.match(mission, /inclusive and equitable quality education/);
+  assert.match(mission, /https:\/\/sdgs\.un\.org\/goals\/goal4/);
 });
 
 test("ambassador application stays in the site through an embedded Google Form", async () => {
