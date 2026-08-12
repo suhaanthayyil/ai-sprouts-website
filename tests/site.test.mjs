@@ -40,15 +40,25 @@ test("navigation exposes Home, Mission, and Our Team without duplicating the Let
 });
 
 test("chapters explorer contains only the United States and India with complete state browsing", async () => {
-  const map = await readFile(new URL("components/chapter-map.tsx", root), "utf8");
+  const [map, usData, indiaData] = await Promise.all([
+    readFile(new URL("components/chapter-map.tsx", root), "utf8"),
+    readFile(new URL("public/us-states.geojson", root), "utf8"),
+    readFile(new URL("public/india-states.geojson", root), "utf8"),
+  ]);
   for (const location of ["Coimbatore", "Charlotte", "Waxhaw", "Mint Hill", "Frisco", "New Albany"]) assert.match(map, new RegExp(location));
-  for (const state of ["Alabama", "Alaska", "North Carolina", "Wyoming", "Andhra Pradesh", "Tamil Nadu", "West Bengal"]) assert.match(map, new RegExp(state));
+  for (const state of ["Alabama", "Alaska", "North Carolina", "Wyoming", "Tamil Nadu"]) assert.match(map, new RegExp(state));
   assert.match(map, /country="United States"/);
   assert.match(map, /country="India"/);
-  assert.match(map, /Search states/);
+  assert.match(map, /us-states\.geojson/);
+  assert.match(map, /india-states\.geojson/);
+  assert.match(map, /geoAlbersUsa/);
+  assert.match(map, /geoMercator/);
+  assert.match(map, /onMouseEnter/);
+  assert.match(map, /onFocus/);
   assert.match(map, /onClick/);
   assert.match(map, /aria-live="polite"/);
-  assert.doesNotMatch(map, /world-atlas|geoNaturalEarth|mapCountries/);
+  assert.equal(JSON.parse(usData).features.filter((feature) => usData.includes(feature.properties.shapeName)).length >= 50, true);
+  assert.equal(JSON.parse(indiaData).features.length >= 28, true);
 });
 
 test("shared page heroes use the official logo instead of the flower illustration", async () => {

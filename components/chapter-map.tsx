@@ -1,25 +1,21 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { geoAlbersUsa, geoMercator, geoPath } from "d3-geo";
+import type { Feature, FeatureCollection, Geometry, GeoJsonProperties } from "geojson";
 
-type ChapterState = {
-  name: string;
-  cities: string[];
-};
+type StateFeature = Feature<Geometry, GeoJsonProperties> & { properties: { shapeName?: string } };
 
-const unitedStates = [
+const mapWidth = 620;
+const mapHeight = 410;
+
+const usStateNames = new Set([
   "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia",
   "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland",
   "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey",
   "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina",
   "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming",
-] as const;
-
-const india = [
-  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
-  "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
-  "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal",
-] as const;
+]);
 
 const chapterCities: Record<string, string[]> = {
   "United States:North Carolina": ["Charlotte", "Waxhaw", "Mint Hill"],
@@ -28,54 +24,94 @@ const chapterCities: Record<string, string[]> = {
   "India:Tamil Nadu": ["Coimbatore"],
 };
 
-function buildStates(country: string, names: readonly string[]): ChapterState[] {
-  return names.map((name) => ({ name, cities: chapterCities[`${country}:${name}`] ?? [] }));
+function normalizeName(name: string) {
+  return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
-function CountryPanel({ country, states, initialState }: { country: string; states: ChapterState[]; initialState: string }) {
+function CountryMap({ country, dataUrl, initialState, filter }: { country: "United States" | "India"; dataUrl: string; initialState: string; filter?: Set<string> }) {
+  const [features, setFeatures] = useState<StateFeature[]>([]);
   const [selected, setSelected] = useState(initialState);
-  const [query, setQuery] = useState("");
-  const selectedState = states.find((state) => state.name === selected) ?? states[0];
-  const visibleStates = useMemo(() => states.filter((state) => state.name.toLowerCase().includes(query.toLowerCase())), [query, states]);
-  const chapterCount = states.reduce((total, state) => total + state.cities.length, 0);
+
+  useEffect(() => {
+    let active = true;
+    fetch(dataUrl)
+      .then((response) => response.json() as Promise<FeatureCollection<Geometry>>)
+      .then((collection) => {
+        if (!active) return;
+        const states = collection.features
+          .map((feature) => ({ ...feature, properties: feature.properties ?? {} }) as StateFeature)
+          .filter((feature) => {
+            const name = normalizeName(feature.properties.shapeName ?? "");
+            return name && (!filter || filter.has(name));
+          });
+        setFeatures(states);
+      });
+    return () => { active = false; };
+  }, [dataUrl, filter]);
+
+  const paths = useMemo(() => {
+    if (!features.length) return [];
+    const collection: FeatureCollection<Geometry> = { type: "FeatureCollection", features };
+    const projection = country === "United States" ? geoAlbersUsa() : geoMercator();
+    projection.fitExtent([[18, 18], [mapWidth - 18, mapHeight - 18]], collection);
+    const path = geoPath(projection);
+    return features.map((feature) => ({
+      name: normalizeName(feature.properties.shapeName ?? "Unknown"),
+      path: path(feature) ?? "",
+    })).filter((state) => state.path);
+  }, [country, features]);
+
+  const cities = chapterCities[`${country}:${selected}`] ?? [];
+  const chapterCount = Object.entries(chapterCities).filter(([key]) => key.startsWith(`${country}:`)).reduce((total, [, locations]) => total + locations.length, 0);
 
   return (
-    <article className="country-chapter-panel">
+    <article className="country-map-panel">
       <header>
-        <div><span>Country</span><h2>{country}</h2></div>
+        <div><span>Interactive map</span><h2>{country}</h2></div>
         <strong>{chapterCount} {chapterCount === 1 ? "chapter" : "chapters"}</strong>
       </header>
-      <label className="state-search">
-        <span className="sr-only">Search {country} states</span>
-        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search states" type="search" />
-      </label>
-      <div className="state-browser">
-        <div className="state-list" aria-label={`${country} states`}>
-          {visibleStates.map((state) => (
-            <button className={state.name === selectedState.name ? "is-active" : ""} key={state.name} type="button" onClick={() => setSelected(state.name)} aria-pressed={state.name === selectedState.name}>
-              <span>{state.name}</span><strong>{state.cities.length}</strong>
-            </button>
-          ))}
-          {visibleStates.length === 0 ? <p>No states match that search.</p> : null}
-        </div>
-        <div className="state-chapter-detail" aria-live="polite">
-          <span>{country}</span>
-          <h3>{selectedState.name}</h3>
-          {selectedState.cities.length > 0 ? <><strong>{selectedState.cities.length} active {selectedState.cities.length === 1 ? "chapter" : "chapters"}</strong><ul>{selectedState.cities.map((city) => <li key={city}>{city}</li>)}</ul></> : <p>No active chapters yet.</p>}
-        </div>
+      <div className="country-map-canvas">
+        {paths.length ? (
+          <svg viewBox={`0 0 ${mapWidth} ${mapHeight}`} role="img" aria-label={`${country} map with interactive states`}>
+            <g>
+              {paths.map((state) => {
+                const count = chapterCities[`${country}:${state.name}`]?.length ?? 0;
+                return <path
+                  className={`${count ? "has-chapters" : ""}${selected === state.name ? " is-active" : ""}`}
+                  d={state.path}
+                  key={state.name}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${state.name}: ${count} ${count === 1 ? "chapter" : "chapters"}`}
+                  onMouseEnter={() => setSelected(state.name)}
+                  onFocus={() => setSelected(state.name)}
+                  onClick={() => setSelected(state.name)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      setSelected(state.name);
+                    }
+                  }}
+                />;
+              })}
+            </g>
+          </svg>
+        ) : <p className="map-loading">Loading map...</p>}
       </div>
+      <div className="map-state-detail" aria-live="polite">
+        <div><span>Selected state</span><h3>{selected}</h3></div>
+        {cities.length ? <div><strong>{cities.length} active {cities.length === 1 ? "chapter" : "chapters"}</strong><ul>{cities.map((city) => <li key={city}>{city}</li>)}</ul></div> : <p>No active chapters yet.</p>}
+      </div>
+      <p className="country-map-help">Hover, focus, or click a state to explore chapters.</p>
     </article>
   );
 }
 
 export function ChapterMap() {
-  const usStates = useMemo(() => buildStates("United States", unitedStates), []);
-  const indiaStates = useMemo(() => buildStates("India", india), []);
-
   return (
-    <div className="country-chapter-grid">
-      <CountryPanel country="United States" states={usStates} initialState="North Carolina" />
-      <CountryPanel country="India" states={indiaStates} initialState="Tamil Nadu" />
+    <div className="country-map-grid">
+      <CountryMap country="United States" dataUrl="/us-states.geojson" initialState="North Carolina" filter={usStateNames} />
+      <CountryMap country="India" dataUrl="/india-states.geojson" initialState="Tamil Nadu" />
     </div>
   );
 }

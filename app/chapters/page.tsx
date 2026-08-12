@@ -18,7 +18,7 @@ export default function ChaptersPage() {
       </section>
       <section className="section map-section">
         <div className="container">
-          <div className="section-heading"><Eyebrow>Our chapters</Eyebrow><h2>Explore every state.</h2><p>Browse the United States and India side by side. Select any state to see current AI Sprouts chapters or discover where a chapter could grow next.</p></div>
+          <div className="section-heading"><Eyebrow>Our chapters</Eyebrow><h2>Explore every state on the map.</h2><p>Hover, focus, or click any state in the United States or India to see its current AI Sprouts chapters and cities.</p></div>
           <ChapterMap />
         </div>
       </section>
