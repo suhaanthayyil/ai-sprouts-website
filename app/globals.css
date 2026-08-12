@@ -364,7 +364,13 @@ h3 { line-height: 1.15; }
 .values-grid article:nth-child(3) { background: #eee9f7; }
 .values-grid article:nth-child(4) { background: #fae2da; }
 .values-grid span { color: var(--green); font-size: .67rem; font-weight: 850; }
-.values-grid h3 { font-family: var(--font-display), serif; font-size: 1.55rem; color: var(--forest); margin-top: 80px; }
+.value-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; }
+.value-card-top i { width: 60px; height: 60px; flex: none; display: grid; place-items: center; border: 1.5px solid var(--forest); border-radius: 18px; background: rgba(255,255,255,.55); box-shadow: 3px 3px 0 rgba(21,63,46,.14); color: var(--forest); font-family: var(--font-display), Georgia, serif; font-size: 1.85rem; font-style: normal; font-weight: 700; line-height: 1; }
+.values-grid article:nth-child(1) .value-card-top i { background: var(--yellow); }
+.values-grid article:nth-child(2) .value-card-top i { background: #c8e8f1; }
+.values-grid article:nth-child(3) .value-card-top i { background: #d9cdf3; }
+.values-grid article:nth-child(4) .value-card-top i { background: #f2b39f; }
+.values-grid h3 { font-family: var(--font-display), serif; font-size: 1.55rem; color: var(--forest); margin-top: 42px; }
 .values-grid p { color: var(--muted); font-size: .9rem; }
 .timeline { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
 .timeline li { display: grid; grid-template-columns: 180px 1fr; gap: 50px; padding: 28px 0; border-bottom: 1px solid var(--line); }

@@ -66,6 +66,12 @@ test("mission aligns AI Sprouts with UN Sustainable Development Goal 4", async (
   assert.match(mission, /https:\/\/sdgs\.un\.org\/goals\/goal4/);
 });
 
+test("mission value cards include themed representative icons", async () => {
+  const [mission, data] = await Promise.all([readFile(new URL("app/mission/page.tsx", root), "utf8"), readFile(new URL("content/site-data.ts", root), "utf8")]);
+  assert.match(mission, /value-card-top/);
+  for (const icon of ["↔", "✦", "✓", "⌂"]) assert.ok(data.includes(`icon: "${icon}"`));
+});
+
 test("ambassador application stays in the site through an embedded Google Form", async () => {
   const [page, embed] = await Promise.all([readFile(new URL("app/ambassador-program/page.tsx", root), "utf8"), readFile(new URL("components/google-form-embed.tsx", root), "utf8")]);
   assert.match(page, /ambassadorFormId/);

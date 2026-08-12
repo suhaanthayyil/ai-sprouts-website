@@ -44,18 +44,22 @@ export const learningPillars = [
 
 export const missionValues = [
   {
+    icon: "↔",
     title: "Accessible by design",
     text: "Friendly language, multiple ways to participate, and meaningful entry points for different experience levels.",
   },
   {
+    icon: "✦",
     title: "Creative on purpose",
     text: "Young people connect technical ideas to stories, art, games, and community challenges they care about.",
   },
   {
+    icon: "✓",
     title: "Responsible from day one",
     text: "Privacy, fairness, accuracy, attribution, and human oversight are part of every learning experience.",
   },
   {
+    icon: "⌂",
     title: "Rooted in community",
     text: "Families, schools, libraries, educators, and local partners help young ideas take root.",
   },
