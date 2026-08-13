@@ -41,7 +41,6 @@ export default function TeamPage() {
               <p>I&apos;m passionate about artificial intelligence and its potential to transform how we learn, create, and solve problems. Through education and hands-on experiences, I hope to make AI more accessible and inspire other students to explore the possibilities of technology.</p>
             </article>
           </div>
-          <p className="placeholder-disclosure">Kairav&apos;s portrait will be added soon.</p>
         </div>
       </section>
       <ContactBand />
